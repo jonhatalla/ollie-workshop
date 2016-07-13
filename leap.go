@@ -1,32 +1,27 @@
-
 package main
 
 import (
-    "fmt"
+	"os"
 
-    "github.com/hybridgroup/gobot"
-    "github.com/hybridgroup/gobot/platforms/leap"
+	"github.com/hybridgroup/gobot"
+	"github.com/hybridgroup/gobot/platforms/ble"
 )
 
-func leapMain() {
-    gbot := gobot.NewGobot()
+var ollie *ble.SpheroOllieDriver
 
-    leapMotionAdaptor := leap.NewLeapMotionAdaptor("leap", "127.0.0.1:6437")
-    l := leap.NewLeapMotionDriver(leapMotionAdaptor, "leap")
+func main() {
+	gbot := gobot.NewGobot()
 
-    work := func() {
-        gobot.On(l.Event("message"), func(data interface{}) {
-            fmt.Println(data.(leap.Frame))
-        })
-    }
+	bleAdaptor := ble.NewBLEClientAdaptor("ble", os.Args[1])
+	ollie = ble.NewSpheroOllieDriver(bleAdaptor, "ollie")
 
-    robot := gobot.NewRobot("leapBot",
-        []gobot.Connection{leapMotionAdaptor},
-        []gobot.Device{l},
-        work,
-    )
+	robot := gobot.NewRobot("ollieBot",
+		[]gobot.Connection{bleAdaptor},
+		[]gobot.Device{ollie},
+		listenToKeyboard,
+	)
 
-    gbot.AddRobot(robot)
+	gbot.AddRobot(robot)
 
-    gbot.Start()
+	gbot.Start()
 }

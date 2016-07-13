@@ -1,14 +1,16 @@
 package main
 
-import ("github.com/nsf/termbox-go"
-// "os"
-"fmt")
+import (
+	"github.com/nsf/termbox-go"
+	// "os"
+	"fmt"
+)
 
 type keyboardEventType int
 
 type Config struct {
-  heading   uint16
-  speed     uint8
+	heading uint16
+	speed   uint8
 }
 
 var config Config
@@ -19,7 +21,7 @@ type keyboardEvent struct {
 }
 
 func listenToKeyboard() {
-  if err := termbox.Init(); err != nil {
+	if err := termbox.Init(); err != nil {
 		panic(err)
 	}
 	defer termbox.Close()
@@ -39,30 +41,29 @@ func listenToKeyboard() {
 				modifySpeed(true)
 			case termbox.KeyEsc:
 				fmt.Println("esc?")
-        return
-    }
+				return
+			}
 		case termbox.EventError:
 			panic(ev.Err)
 		}
+		fmt.Println("roll", config)
+		ollie.Roll(config.speed, config.heading)
 	}
 }
 
-func modifyHeading(isLeft bool){
-  dir := 5
-  if isLeft {
-      dir = -5
-  }
-  config.heading += uint16(dir)
-  config.heading %= 360
-  // need to call ollie bot
-  fmt.Println(config)
+func modifyHeading(isLeft bool) {
+	dir := 5
+	if isLeft {
+		dir = -5
+	}
+	config.heading += uint16(dir)
+	config.heading %= 360
 }
 
-func modifySpeed(isForward bool){
-  speed := -5
-  if isForward {
-    speed = 5
-  }
-  config.speed += uint8(speed)
-  //need to call ollie bot here
+func modifySpeed(isForward bool) {
+	speed := -5
+	if isForward {
+		speed = 5
+	}
+	config.speed += uint8(speed)
 }
