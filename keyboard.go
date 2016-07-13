@@ -51,19 +51,12 @@ func listenToKeyboard() {
 	}
 }
 
-func modifyHeading(isLeft bool) {
-	dir := 5
-	if isLeft {
-		dir = -5
-	}
-	config.heading += uint16(dir)
-	config.heading %= 360
-}
+func modifyHeading(isLeft bool){
+  var dir uint16 = 5
+  if isLeft {
+      dir = 355
+  }
 
-func modifySpeed(isForward bool) {
-	speed := -5
-	if isForward {
-		speed = 5
-	}
-	config.speed += uint8(speed)
+  config.heading += dir
+  config.heading %= 360
 }
