@@ -1,7 +1,7 @@
 package main
 
 import ("github.com/nsf/termbox-go"
-"os"
+// "os"
 "fmt")
 
 type keyboardEventType int
@@ -19,6 +19,10 @@ type keyboardEvent struct {
 }
 
 func listenToKeyboard() {
+  if err := termbox.Init(); err != nil {
+		panic(err)
+	}
+	defer termbox.Close()
 	termbox.SetInputMode(termbox.InputEsc)
 
 	for {
@@ -35,8 +39,8 @@ func listenToKeyboard() {
 				modifySpeed(true)
 			case termbox.KeyEsc:
 				fmt.Println("esc?")
-        os.Exit(0)
-			}
+        return
+    }
 		case termbox.EventError:
 			panic(ev.Err)
 		}
