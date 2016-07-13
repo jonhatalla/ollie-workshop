@@ -1,6 +1,8 @@
 package main
 
-import "github.com/nsf/termbox-go"
+import ("github.com/nsf/termbox-go"
+"os"
+"fmt")
 
 type keyboardEventType int
 
@@ -24,11 +26,11 @@ func listenToKeyboard() {
 		case termbox.EventKey:
 			switch ev.Key {
 			case termbox.KeyArrowLeft:
-				modifyDirection(true)
+				modifyHeading(true)
 			case termbox.KeyArrowDown:
 				modifySpeed(false)
 			case termbox.KeyArrowRight:
-				modifyDirection(false)
+				modifyHeading(false)
 			case termbox.KeyArrowUp:
 				modifySpeed(true)
 			case termbox.KeyEsc:
@@ -46,16 +48,17 @@ func modifyHeading(isLeft bool){
   if isLeft {
       dir = -5
   }
-  config.heading += dir
+  config.heading += uint16(dir)
   config.heading %= 360
   // need to call ollie bot
+  fmt.Println(config)
 }
 
 func modifySpeed(isForward bool){
   speed := -5
-  if isFoward {
+  if isForward {
     speed = 5
   }
-  config.speed += speed
+  config.speed += uint8(speed)
   //need to call ollie bot here
 }
